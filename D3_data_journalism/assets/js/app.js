@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+var margin = { top: 10, right: 30, bottom: 60, left: 60 },
     width = 700 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -44,8 +44,8 @@ d3.csv("assets/data/data.csv").then(function (data) {
     // Add X axis label:
     svg.append("text")
         .attr("text-anchor", "end")
-        .attr("x", width)
-        .attr("y", height + margin.top + 20)
+        .attr("x", (width + margin.left + margin.right) / 2)
+        .attr("y", height + margin.top + 30)
         .text("Poverty Rate (%)")
         .style("fill", "black");
 
@@ -121,7 +121,7 @@ d3.csv("assets/data/data.csv").then(function (data) {
         .attr('font-size', '12px')
         .style('font', 'bold Verdana, Helvetica, Arial, sans-serif')
         .attr('text-anchor', 'middle')
+        .style("opacity", 0.75)
         .style('fill', 'white');
-
 
 });
