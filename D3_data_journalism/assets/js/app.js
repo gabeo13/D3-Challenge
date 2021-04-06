@@ -18,6 +18,7 @@ var svg = d3.select("#scatter")
 d3.csv("assets/data/data.csv").then(function (data) {
 
     console.log(data);
+
     var selData = [];
 
     // Cast the chosen datum to a number for each piece of data
@@ -88,16 +89,16 @@ d3.csv("assets/data/data.csv").then(function (data) {
         .text("Smokes (%)")
         .style("fill", "black");
 
+
     // Y axis label #3:
     svg.append("text")
-        .data(data)
         .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
         .attr("y", -margin.left + 25)
         .attr("x", -(height + margin.top + margin.bottom) / 2)
         .text("Obese (%)")
         .style("fill", "black")
-        .on('click', ((d, i) => selData.push(d['obesity'][i])));
+        .on('click', data.forEach(d => selData.push(d['obesity'])));
 
     console.log(selData);
 
@@ -138,7 +139,7 @@ d3.csv("assets/data/data.csv").then(function (data) {
     }
 
 
-    // Add dots
+    // Add scatter bubbles
     svg.append('g')
         .selectAll("dot")
         .data(data)
