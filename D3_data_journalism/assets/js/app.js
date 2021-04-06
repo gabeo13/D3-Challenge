@@ -1,5 +1,5 @@
 // set the dimensions and margins of the graph
-var margin = { top: 10, right: 30, bottom: 60, left: 60 },
+var margin = { top: 10, right: 30, bottom: 100, left: 100 },
     width = 700 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
@@ -18,17 +18,22 @@ var svg = d3.select("#scatter")
 d3.csv("assets/data/data.csv").then(function (data) {
 
     console.log(data);
+    var selData = [];
 
-    // Cast the poverty and healthcare datum to a number for each piece of data
+    // Cast the chosen datum to a number for each piece of data
     data.forEach(function (data) {
         data['poverty'] = +data['poverty'];
         data['healthcare'] = +data['healthcare'];
+        data['age'] = +data['age'];
+        data['income'] = +data['income'];
+        data['obesity'] = +data['obesity'];
+        data['smokes'] = +data['smokes'];
     });
 
 
     // Add X axis
     var x = d3.scaleLinear()
-        .domain([8, 23])
+        .domain([d3.min(data, d => d['poverty']) - 1, d3.max(data, d => d['poverty']) + 1])
         .range([0, width]);
     svg.append("g")
         .attr("transform", "translate(0," + height + ")")
@@ -36,28 +41,68 @@ d3.csv("assets/data/data.csv").then(function (data) {
 
     // Add Y axis
     var y = d3.scaleLinear()
-        .domain([2, 26])
+        .domain([d3.min(data, d => d['healthcare']) - 1, d3.max(data, d => d['healthcare']) + 1])
         .range([height, 0]);
     svg.append("g")
         .call(d3.axisLeft(y));
 
-    // Add X axis label:
+    // Add X axis label #1:
     svg.append("text")
         .attr("text-anchor", "end")
         .attr("x", (width + margin.left + margin.right) / 2)
-        .attr("y", height + margin.top + 30)
+        .attr("y", height + margin.top + 25)
         .text("Poverty Rate (%)")
         .style("fill", "black");
 
-    // Y axis label:
+    // Add X axis label #2:
     svg.append("text")
         .attr("text-anchor", "end")
+        .attr("x", (width + margin.left + margin.right) / 2)
+        .attr("y", height + margin.top + 50)
+        .text("Age (Median)")
+        .style("fill", "black");
+
+    // Add X axis label #3:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", (width + margin.left + margin.right) / 2)
+        .attr("y", height + margin.top + 75)
+        .text("Household Income (Median)")
+        .style("fill", "black");
+
+    // Y axis label #1:
+    svg.append("text")
+        .attr("text-anchor", "middle")
         .attr("transform", "rotate(-90)")
-        .attr("y", -margin.left + 20)
-        .attr("x", -margin.top)
+        .attr("y", -margin.left + 75)
+        .attr("x", -(height + margin.top + margin.bottom) / 2)
         .text("Lack of Healthcare (%)")
         .style("fill", "black");
 
+    // Y axis label #2:
+    svg.append("text")
+        .attr("text-anchor", "middle")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left + 50)
+        .attr("x", -(height + margin.top + margin.bottom) / 2)
+        .text("Smokes (%)")
+        .style("fill", "black");
+
+    // Y axis label #3:
+    svg.append("text")
+        .data(data)
+        .attr("text-anchor", "middle")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left + 25)
+        .attr("x", -(height + margin.top + margin.bottom) / 2)
+        .text("Obese (%)")
+        .style("fill", "black")
+        .on('click', ((d, i) => selData.push(d['obesity'][i])));
+
+    console.log(selData);
+
+
+    // Create tooltip variable with box styling
     var tooltip = d3.select("#scatter")
         .append("div")
         .style("opacity", 0)
@@ -79,7 +124,7 @@ d3.csv("assets/data/data.csv").then(function (data) {
 
     var mousemove = function (d) {
         tooltip
-            .html("State: " + d['state'] + '<br>' + "Lack of Healthcare: " + d['healthcare'] + '%' + '<br>' + "Poverty Rate: " + d['poverty'] + '%')
+            .html(d['state'] + '<br>' + "Lack of Healthcare: " + d['healthcare'] + '%' + '<br>' + "Poverty Rate: " + d['poverty'] + '%')
             .style("left", (d3.mouse(this)[0] + 90) + "px") // It is important to put the +90: other wise the tooltip is exactly where the point is an it creates a weird effect
             .style("top", (d3.mouse(this)[1]) + "px")
     }
@@ -110,6 +155,7 @@ d3.csv("assets/data/data.csv").then(function (data) {
         .on("mousemove", mousemove)
         .on("mouseleave", mouseleave);
 
+    // Add state abbr labels    
     svg.append('g')
         .selectAll("text")
         .data(data)
@@ -118,10 +164,10 @@ d3.csv("assets/data/data.csv").then(function (data) {
         .text(d => d['abbr'])
         .attr("x", (d) => x(d['poverty']))
         .attr("y", (d) => y(d['healthcare']))
-        .attr('font-size', '12px')
+        .attr('font-size', '10px')
         .style('font', 'bold Verdana, Helvetica, Arial, sans-serif')
         .attr('text-anchor', 'middle')
-        .style("opacity", 0.75)
+        .style("opacity", 0.85)
         .style('fill', 'white');
 
 });
