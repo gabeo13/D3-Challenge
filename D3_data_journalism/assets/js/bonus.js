@@ -1,3 +1,5 @@
+
+// set svg dimensional params
 var svgWidth = 960;
 var svgHeight = 500;
 
@@ -19,7 +21,7 @@ var svg = d3
     .attr("width", svgWidth)
     .attr("height", svgHeight)
     .style("background-color", "#bdc3c7")
-    .style("opacity", 0.9);
+    .style("opacity", 0.8);
 
 // Append an SVG group
 var chartGroup = svg.append("g")
@@ -69,7 +71,7 @@ function yScale(data, chosenYAxis) {
 function renderYAxes(newYScale, yAxis) {
     var leftAxis = d3.axisLeft(newYScale);
 
-    xAxis.transition()
+    yAxis.transition()
         .duration(1000)
         .call(leftAxis);
 
@@ -87,6 +89,7 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYA
 
     return circlesGroup;
 }
+
 
 // function used for updating circles group with new tooltip
 function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
@@ -112,7 +115,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
         .attr("class", "tooltip")
         .offset([80, -60])
         .html(function (d) {
-            return (`${labelx} ${d[chosenXAxis]}% <br>${labely} ${d[chosenXAxis]}% `);
+            return (`${labelx} ${d[chosenXAxis]}% <br>${labely} ${d[chosenYAxis]}% `);
         });
 
     circlesGroup.call(toolTip);
@@ -145,7 +148,7 @@ d3.csv("assets/data/data.csv").then(function (data, err) {
     // xLinearScale function above csv import
     var xLinearScale = xScale(data, chosenXAxis);
 
-    // Create y scale function
+    // yLinearScale function above csv import
     var yLinearScale = yScale(data, chosenYAxis);
 
     // Create initial axis functions
@@ -159,7 +162,7 @@ d3.csv("assets/data/data.csv").then(function (data, err) {
         .call(bottomAxis);
 
     // append y axis
-    chartGroup.append("g")
+    var yAxis = chartGroup.append("g")
         .classed("y-axis", true)
         .call(leftAxis);
 
@@ -176,20 +179,19 @@ d3.csv("assets/data/data.csv").then(function (data, err) {
         .style("stroke", "white")
         .style("stroke-width", 1);
 
-    // Add state abbr labels    
-    // chartGroup.append('g')
-    //     .selectAll("text")
-    //     .data(data)
-    //     .enter()
-    //     .append("text")
-    //     .text(d => d['abbr'])
-    //     .attr("x", (d) => x(d[chosenXAxis]))
-    //     .attr("y", (d) => y(d[chosenYAxis]))
-    //     .attr('font-size', '10px')
-    //     .style('font', 'bold Verdana, Helvetica, Arial, sans-serif')
-    //     .attr('text-anchor', 'middle')
-    //     .style("opacity", 0.85)
-    //     .style('fill', 'white');
+    //Add state abbr labels    
+    stateLabels = svg.append('g').selectAll("text")
+        .data(data)
+        .enter()
+        .append("text")
+        .text(d => d['abbr'])
+        .attr("x", (d) => xLinearScale(d[chosenXAxis]))
+        .attr("y", (d) => yLinearScale(d[chosenYAxis]))
+        .attr('font-size', '10px')
+        .style('font', 'bold Verdana, Helvetica, Arial, sans-serif')
+        .attr('text-anchor', 'middle')
+        .style("opacity", 1)
+        .style('fill', 'white');
 
     // Create group for two x-axis labels
     var xlabelsGroup = chartGroup.append("g")
@@ -306,7 +308,7 @@ d3.csv("assets/data/data.csv").then(function (data, err) {
                 circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
 
                 // changes classes to change bold text
-                if (chosenXAxis === "healthcare") {
+                if (chosenYAxis === "healthcare") {
                     healthcareLabel
                         .classed("active", true)
                         .classed("inactive", false);
