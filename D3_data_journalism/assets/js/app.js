@@ -53,22 +53,6 @@ d3.csv("assets/data/data.csv").then(function (data) {
         .text("Poverty Rate (%)")
         .style("fill", "black");
 
-    // // Add X axis label #2:
-    // svg.append("text")
-    //     .attr("text-anchor", "end")
-    //     .attr("x", (width + margin.left + margin.right) / 2)
-    //     .attr("y", height + margin.top + 50)
-    //     .text("Age (Median)")
-    //     .style("fill", "black");
-
-    // // Add X axis label #3:
-    // svg.append("text")
-    //     .attr("text-anchor", "end")
-    //     .attr("x", (width + margin.left + margin.right) / 2)
-    //     .attr("y", height + margin.top + 75)
-    //     .text("Household Income (Median)")
-    //     .style("fill", "black");
-
     // Y axis label #1:
     svg.append("text")
         .attr("text-anchor", "middle")
@@ -77,26 +61,6 @@ d3.csv("assets/data/data.csv").then(function (data) {
         .attr("x", -(height + margin.top + margin.bottom) / 2)
         .text("Lack of Healthcare (%)")
         .style("fill", "black");
-
-    // // Y axis label #2:
-    // svg.append("text")
-    //     .attr("text-anchor", "middle")
-    //     .attr("transform", "rotate(-90)")
-    //     .attr("y", -margin.left + 50)
-    //     .attr("x", -(height + margin.top + margin.bottom) / 2)
-    //     .text("Smokes (%)")
-    //     .style("fill", "black");
-
-
-    // // Y axis label #3:
-    // svg.append("text")
-    //     .attr("text-anchor", "middle")
-    //     .attr("transform", "rotate(-90)")
-    //     .attr("y", -margin.left + 25)
-    //     .attr("x", -(height + margin.top + margin.bottom) / 2)
-    //     .text("Obese (%)")
-    //     .style("fill", "black")
-    //     .on('click', data.forEach(d => selData.push(d['obesity'])));
 
     // Create tooltip variable with box styling
     var tooltip = d3.select("#scatter")

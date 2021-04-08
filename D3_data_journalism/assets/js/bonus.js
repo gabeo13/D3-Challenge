@@ -46,8 +46,8 @@ function xScale(data, chosenXAxis) {
 }
 
 // function used for updating xAxis var upon click on axis label
-function renderXAxes(newXScale, xAxis) {
-    var bottomAxis = d3.axisBottom(newXScale);
+function renderXAxes(xScale, xAxis) {
+    var bottomAxis = d3.axisBottom(xScale);
 
     xAxis.transition()
         .duration(1000)
@@ -68,28 +68,46 @@ function yScale(data, chosenYAxis) {
 }
 
 // function used for updating yAxis var upon click on axis label
-function renderYAxes(newYScale, yAxis) {
-    var leftAxis = d3.axisLeft(newYScale);
+function renderYAxes(yScale, yAxis) {
+    var leftAxis = d3.axisLeft(yScale);
 
     yAxis.transition()
         .duration(1000)
         .call(leftAxis);
 
     return yAxis;
-}
+};
 
 // function used for updating circles group with a transition to
 // new circles
-function renderCircles(circlesGroup, newXScale, chosenXAxis, newYScale, chosenYAxis) {
+function renderXCircles(circlesGroup, textGroup, xScale, chosenXAxis) {
 
     circlesGroup.transition()
         .duration(1000)
-        .attr("cx", d => newXScale(d[chosenXAxis]))
-        .attr("cy", d => newYScale(d[chosenYAxis]));
+        .attr("cx", d => xScale(d[chosenXAxis]));
+
+    textGroup.transition()
+        .duration(1000)
+        .attr("x", d => xScale(d[chosenXAxis]));
+
 
     return circlesGroup;
-}
+};
 
+// function used for updating circles group with a transition to
+// new circles
+function renderYCircles(circlesGroup, textGroup, yScale, chosenYAxis) {
+
+    circlesGroup.transition()
+        .duration(1000)
+        .attr("cy", d => yScale(d[chosenYAxis]));
+
+    textGroup.transition()
+        .duration(1000)
+        .attr("y", d => yScale(d[chosenYAxis]));
+
+    return circlesGroup;
+};
 
 // function used for updating circles group with new tooltip
 function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
@@ -112,7 +130,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
     }
 
     var toolTip = d3.tip()
-        .attr("class", "tooltip")
+        .attr("class", "d3-tip")
         .offset([80, -60])
         .html(function (d) {
             return (`${labelx} ${d[chosenXAxis]}% <br>${labely} ${d[chosenYAxis]}% `);
@@ -180,7 +198,7 @@ d3.csv("assets/data/data.csv").then(function (data, err) {
         .style("stroke-width", 1);
 
     //Add state abbr labels    
-    stateLabels = svg.append('g').selectAll("text")
+    var textGroup = chartGroup.selectAll("panda")
         .data(data)
         .enter()
         .append("text")
@@ -191,7 +209,7 @@ d3.csv("assets/data/data.csv").then(function (data, err) {
         .style('font', 'bold Verdana, Helvetica, Arial, sans-serif')
         .attr('text-anchor', 'middle')
         .style("opacity", 1)
-        .style('fill', 'white');
+        .style('fill', 'black');
 
     // Create group for two x-axis labels
     var xlabelsGroup = chartGroup.append("g")
@@ -257,7 +275,7 @@ d3.csv("assets/data/data.csv").then(function (data, err) {
                 xAxis = renderXAxes(xLinearScale, xAxis);
 
                 // updates circles with new x values
-                circlesGroup = renderCircles(circlesGroup, xLinearScale, chosenXAxis);
+                circlesGroup = renderXCircles(circlesGroup, textGroup, xLinearScale, chosenXAxis);
 
                 // updates tooltips with new info
                 circlesGroup = updateToolTip(chosenXAxis, circlesGroup);
@@ -282,27 +300,27 @@ d3.csv("assets/data/data.csv").then(function (data, err) {
             }
         });
 
-    // x axis labels event listener
+    // y axis labels event listener
     ylabelsGroup.selectAll("text")
         .on("click", function () {
             // get value of selection
             var value = d3.select(this).attr("value");
             if (value !== chosenYAxis) {
 
-                // replaces chosenXAxis with value
+                // replaces chosenYAxis with value
                 chosenYAxis = value;
 
                 // console.log(chosenXAxis)
 
                 // functions here found above csv import
-                // updates x scale for new data
+                // updates y scale for new data
                 yLinearScale = yScale(data, chosenYAxis);
 
-                // updates x axis with transition
+                // updates y axis with transition
                 yAxis = renderYAxes(yLinearScale, yAxis);
 
-                // updates circles with new x values
-                circlesGroup = renderCircles(circlesGroup, yLinearScale, chosenYAxis);
+                // updates circles with new y values
+                circlesGroup = renderYCircles(circlesGroup, textGroup, yLinearScale, chosenYAxis);
 
                 // updates tooltips with new info
                 circlesGroup = updateToolTip(chosenYAxis, circlesGroup);
