@@ -12,8 +12,8 @@
 }
 
 .inactive {
-  font-weight: bold;
-  fill: #561aafb6;
+  font-weight: lighter;
+  fill: #3498db;
   transition: fill 0.3s ease-out;
   text-anchor: middle;
 }
