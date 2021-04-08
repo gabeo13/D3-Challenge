@@ -138,20 +138,16 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
 
     var toolTip = d3.tip()
         .attr("class", "d3-tip")
-        .offset([10, -10])
+        .offset([-5, 10])
         .html(function (d) {
-            return (`<strong>${d['state']}<strong><br>${labelx} ${d[chosenXAxis]} <br>${labely} ${d[chosenYAxis]} `);
+            return (`${d['state']} <br> ${labelx} ${d[chosenXAxis]} <br> ${labely} ${d[chosenYAxis]} `);
         });
 
     circlesGroup.call(toolTip);
 
-    circlesGroup.on("mouseover", function (data) {
-        toolTip.show(data);
-    })
+    circlesGroup.on("mouseover", toolTip.show)
         // onmouseout event
-        .on("mouseout", function (data, index) {
-            toolTip.hide(data);
-        });
+        .on("mouseout", toolTip.hide);
 
     return circlesGroup;
 };
