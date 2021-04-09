@@ -123,7 +123,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
         labelx = "Median Age: ";
     }
     else {
-        labelx = "Household Income: "
+        labelx = "Household Income: $"
     }
 
     if (chosenYAxis === "healthcare") {
@@ -133,7 +133,7 @@ function updateToolTip(chosenXAxis, chosenYAxis, circlesGroup) {
         labely = "Smoking Rate: ";
     }
     else {
-        chosenYAxis = 'Obesity Rate: '
+        labely = 'Obesity Rate: '
     }
 
     var toolTip = d3.tip()
