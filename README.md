@@ -2,7 +2,7 @@
 ![](Images/census.jpg)
 
 ---
-Background & Challenge
+## Background & Challenge
 
 Welcome to the newsroom! You've just accepted a data visualization position for a major metro paper. You're tasked with analyzing the current trends shaping people's lives, as well as creating charts, graphs, and interactive elements to help readers understand your findings.
 
@@ -13,7 +13,7 @@ The data set included with the assignment is based on 2014 ACS 1-year estimates 
 Create a scatter plot that represents each state with circle elements. Place additional labels in your scatter plot and give them click events so that your users can decide which data to display. Animate the transitions for your circles' locations as well as the range of your axes. Add tooltips to your circles and display each tooltip with the data that the user has selected.
 
 ---
-Graphic Application Dev Toolkit
+## Graphic Application Dev Toolkit
 
 >* JavaScript
 >* d3.js
@@ -24,7 +24,7 @@ Graphic Application Dev Toolkit
 >* CSV Backend
 >* [Gif Generator](https://gifcap.dev/)
 ---
-Operating Instructions
+## Operating Instructions
 
 1. Clone repository to desired location while maintaining directory paths. 
 
@@ -36,6 +36,6 @@ Operating Instructions
 
 4. **Local Server** *Python* : Using your browser, navigate to the initialized server at **localhost:8000**, and this will serve the application without CORS issues.
 ---
-Dynamic Graphic Screenshot
+## Dynamic Graphic Screenshot
 
 ![](Images/d3.gif)
